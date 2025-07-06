@@ -5,7 +5,9 @@ function App() {
   const [oneWay, setOneWay] = useState(null);
   const [returnFlight, setReturnFlight] = useState(null);
   const [depDate, setDepDate] = useState("");
+  const [returnDate, setReturnDate] = useState("");
 
+  console.log(depDate);
   const oneWayHandler = () => {
     setOneWay("oneWay");
     setReturnFlight(null);
@@ -15,16 +17,30 @@ function App() {
     setReturnFlight("return");
     setOneWay(null);
   };
-  const date = new Date().toISOString().split("T")[0];
+  const date = new Date().toISOString().split("").slice(0, 10).join("");
+
   const dateChangeHandler = (e) => {
     setDepDate(e.target.value);
   };
-  console.log(date);
+
+  const returnDateChangeHandler = (e) => {
+    e.preventDefault();
+    setReturnDate(e.target.value);
+  };
+
   const depSubmitHandler = (e) => {
     e.preventDefault();
     alert(`You have booked a one-way flight on ${depDate} `);
     setDepDate("");
   };
+
+  const returnSubmitHandler = (e) => {
+    e.preventDefault();
+    alert(`You have booked a return flight from ${depDate} to ${returnDate} `);
+    setDepDate("");
+    setReturnDate("");
+  };
+
   return (
     <div className="m-5">
       <nav className=" flex justify-center text-3xl pt-4">
@@ -45,7 +61,9 @@ function App() {
             One Way Flight
           </button>
           <button
-            className="border rounded-sm cursor-pointer px-2 py-1"
+            className={`border rounded-sm cursor-pointer px-2 py-1 ${
+              returnFlight === "return" ? "bg-black text-white" : ""
+            }`}
             onClick={returnFlightHandler}
           >
             {" "}
@@ -72,7 +90,32 @@ function App() {
             </button>
           </form>
         )}
-        {returnFlight === "return" && <div>return</div>}
+        {returnFlight === "return" && (
+          <form
+            onSubmit={returnSubmitHandler}
+            className="flex flex-col w-[20%] gap-4"
+          >
+            <label htmlFor=""> Departure Date : </label>
+            <input
+              type="date"
+              value={depDate}
+              min={date}
+              className="border rounded-sm px-4 py-1"
+              onChange={dateChangeHandler}
+            />
+            <label htmlFor=""> Return Date : </label>
+            <input
+              type="date"
+              value={returnDate}
+              min={depDate}
+              className="border rounded-sm px-4 py-1"
+              onChange={returnDateChangeHandler}
+            />
+            <button type="submit" className="px-2 border rounded-sm py-1">
+              Submit
+            </button>
+          </form>
+        )}
       </div>
     </div>
   );
