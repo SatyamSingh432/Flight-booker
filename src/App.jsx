@@ -37,7 +37,9 @@ function App() {
          gap-4"
         >
           <button
-            className="{border rounded-sm cursor-pointer px-2 py-1}"
+            className={`border rounded-sm cursor-pointer px-2 py-1 ${
+              oneWay === "oneWay" ? "bg-black text-white" : ""
+            }`}
             onClick={oneWayHandler}
           >
             One Way Flight
